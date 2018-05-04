@@ -1,10 +1,10 @@
-function container=guessthesix(Q,W,bsize)
+function container=guessthesix(Q,W,bsize,cNum)
 %GUESSTHESIX guesses the container for six interested Bounding boxes.
 %   CONTAINER=GUESSTHESIX(Q,W,BSIZE) outputs the container for the desired
 %   Bounding boxes from the frequency row vector Q, row vector of mid
 %   points of bins  in W and binsize in BSIZE.
 
-for l=6:-1:2 % This condition has to be changed accordingly if number plates are other than six characters.
+for l=(cNum-1):-1:2 % This condition has to be changed accordingly if number plates are other than six characters.
     val=find(Q==l); % Find the indices corresponding the value of frequency equals 'l'.
     var=length(val); % Check how many indices are found.
     if isempty(var) || var == 1 % If no index or one index is found.
@@ -16,10 +16,10 @@ for l=6:-1:2 % This condition has to be changed accordingly if number plates are
         if length(Q)==val % In case if the last index value is reached,
             index=[];     % then index+1 will be out of Q.
         end
-        if Q(index)+Q(index+1) == 7 % If the sum of frequencies with the subsequent bin equals six.
+        if Q(index)+Q(index+1) == cNum % If the sum of frequencies with the subsequent bin equals six.
             container=[W(index)-(bsize/2) W(index+1)+(bsize/2)]; % Calculae container and break looping
             break;                                               % for more values.
-        elseif Q(index)+Q(index-1) == 7 % If the sum of frequencies with the previous bin equals six.
+        elseif Q(index)+Q(index-1) == cNum % If the sum of frequencies with the previous bin equals six.
             container=[W(index-1)-(bsize/2) W(index)+(bsize/2)]; % Calculate container and break looping
             break;                                               % for more values.
         end
@@ -33,10 +33,10 @@ for l=6:-1:2 % This condition has to be changed accordingly if number plates are
             if length(Q)==val(k) % In case if the last index value is reached,
                 index=[];        % then index+1 will be out of Q.
             end
-            if Q(index)+Q(index+1) == 7
+            if Q(index)+Q(index+1) == cNum
                 container=[W(index)-(bsize/2) W(index+1)+(bsize/2)]; % Calculate the value of container and break.
                 break;
-            elseif Q(index)+Q(index-1) == 7
+            elseif Q(index)+Q(index-1) == cNum
                 container=[W(index-1)-(bsize/2) W(index)+(bsize/2)];
                 break;
             end
