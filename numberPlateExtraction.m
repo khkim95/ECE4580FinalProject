@@ -1,7 +1,7 @@
-function numberPlateExtraction
+function numberPlateExtraction(image,NC)
 %NUMBERPLATEEXTRACTION extracts the characters from the input number plate image.
 
-f=imread('7.jpg'); % Reading the number plate image.
+f=imread(image); % Reading the number plate image.
 figure(1),imshow(f);
 f=imresize(f,[400 NaN]); % Resizing the image keeping aspect ratio same.
 g=rgb2gray(f); % Converting the RGB (color) image to gray (intensity).
@@ -30,14 +30,14 @@ figure(5),imshow(H);
 H=imerode(H,strel('line',3,90));
 % Selecting all the regions that are of pixel area more than 100.
 final=bwareaopen(H,100);
-% final=bwlabel(final); % Uncomment to make compitable with the previous versions of MATLAB®
+% final=bwlabel(final); % Uncomment to make compitable with the previous versions of MATLABÂ®
 % Two properties 'BoundingBox' and binary 'Image' corresponding to these
 % Bounding boxes are acquired.
 Iprops=regionprops(final,'BoundingBox','Image');
 % Selecting all the bounding boxes in matrix of order numberofboxesX4;
 NR=cat(1,Iprops.BoundingBox);
 % Calling of controlling function.
-r=controlling(NR); % Function 'controlling' outputs the array of indices of boxes required for extraction of characters.
+r=controlling(NR, NC); % Function 'controlling' outputs the array of indices of boxes required for extraction of characters.
 if ~isempty(r) % If succesfully indices of desired boxes are achieved.
     I={Iprops.Image}; % Cell array of 'Image' (one of the properties of regionprops)
     noPlate=[]; % Initializing the variable of number plate string.
@@ -58,19 +58,7 @@ if ~isempty(r) % If succesfully indices of desired boxes are achieved.
     fprintf(fid,'%s\n',noPlate);      % to the text file, if executed a notepad file with the
     fclose(fid);                      % name noPlate.txt will be open with the number plate written.
     winopen('noPlate.txt')
-    
-%     Uncomment the portion of code below if Database is  to be organized. Since my
-%     project requires database so I have written this code. DB is the .mat
-%     file containing the array of structure of all entries of database.
-%     load DB
-%     for x=1:length(DB)
-%         recordplate=getfield(DB,{1,x},'PlateNumber');
-%         if strcmp(noPlate,recordplate)
-%             disp(DB(x));
-%             disp('*-*-*-*-*-*-*');
-%         end
-%     end
-    
+
 else % If fail to extract the indexes in 'r' this line of error will be displayed.
     fprintf('Unable to extract the characters from the number plate.\n');
     fprintf('The characters on the number plate might not be clear or touching with each other or boundries.\n');
