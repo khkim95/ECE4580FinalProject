@@ -1,10 +1,7 @@
 function letter=readLetter(snap)
-%READLETTER reads the character fromthe character's binary image.
-%   LETTER=READLETTER(SNAP) outputs the character in class 'char' from the
-%   input binary image SNAP.
 
-load NewTemplates % Loads the templates of characters in the memory.
-snap=imresize(snap,[42 24]); % Resize the input image so it can be compared with the template's images.
+load NewTemplates 
+snap=imresize(snap,[42 24]); 
 comp=[ ];
 for n=1:length(NewTemplates)
     sem=corr2(NewTemplates{1,n},snap); % Correlation the input image with every image in the template for best matching.
