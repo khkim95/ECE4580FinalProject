@@ -29,7 +29,7 @@ H=bwmorph(F,'thin',1);
 figure(5),imshow(H);
 H=imerode(H,strel('line',3,90));
 % Selecting all the regions that are of pixel area more than 100.
-final=bwareaopen(H,2000);
+final=bwareaopen(H,300);
 % final=bwlabel(final); % Uncomment to make compitable with the previous versions of MATLAB®
 % Two properties 'BoundingBox' and binary 'Image' corresponding to these
 % Bounding boxes are acquired.
@@ -44,14 +44,12 @@ hold off
 % Selecting all the bounding boxes in matrix of order numberofboxesX4;
 NR=cat(1,Iprops.BoundingBox);
 % Calling of controlling function.
-r=controlling(NR, NC); % Function 'controlling' outputs the array of indices of boxes required for extraction of characters.
-if ~isempty(r) % If succesfully indices of desired boxes are achieved.
+newBox=controlling(NR, NC); % Function 'controlling' outputs the array of indices of boxes required for extraction of characters.
+if ~isempty(newBox) % If succesfully indices of desired boxes are achieved.
     I={Iprops.Image}; % Cell array of 'Image' (one of the properties of regionprops)
     noPlate=[]; % Initializing the variable of number plate string.
-   
-    for v=1:length(r)
-        N=I{1,r(v)}; % Extracting the binary image corresponding to the indices in 'r'.
-
+    for v=1:size(newBox,1)
+        N=I{1,v}; % Extracting the binary image corresponding to the indices in 'r'.
         letter=readLetter(N); % Reading the letter corresponding the binary image 'N'.
         noPlate=[noPlate letter]; % Appending every subsequent character in noPlate variable.
     end

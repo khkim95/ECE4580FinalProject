@@ -38,23 +38,12 @@ elseif length(Y)==1
 elseif isempty(ind) || length(ind)>1 % If there is no vlaue of '6' in the Q vector.
     [A,B]=hist(NR(:,2),20); % Use y-coordinate approach only.
     ind2=find(A==NC);
+
     if length(ind2)==1
         MP=B(ind2);
         binsize=B(2)-B(1);
         container=[MP-(binsize/2) MP+(binsize/2)]; % Calculating the complete container size.
         r=takeboxes(NR,container,1);
-    else
-        container=guessthesix(A,B,(B(2)-B(1)), NC); % Call of function guessthesix.
-        if ~isempty(container) % If guessthesix works succesfully.
-            r=takeboxes(NR,container,1); % Call the function takeboxes.
-        elseif isempty(container)
-            container2=guessthesix(E,R,(R(2)-R(1)), NC);
-            if ~isempty(container2)
-                r=takeboxes(NR2,container2,2.5);
-            else
-                r=[]; % Otherwise assign an empty matrix to 'r'.
-            end
-        end
     end
 end
 end
